@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="webduino:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/webduino_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="WebduinoServer" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-5.1.37-bin" />
+          <element id="library" level="project" name="java-json" />
+          <element id="library" level="project" name="gcm-server" />
+          <element id="library" level="project" name="org.json-20120521" />
+          <element id="library" level="project" name="json_simple-1.1" />
+          <element id="library" level="project" name="quartz-2.2.2" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="WebduinoServer/web/Web" />
+    </root>
+  </artifact>
+</component>
