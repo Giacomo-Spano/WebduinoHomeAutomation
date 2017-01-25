@@ -29,18 +29,21 @@ function load() {
     manualOffForm.style.display = 'none';
     stopManualForm.style.display = 'none';
 
-    getJson(heaterStatusPath, refresh);
+    getJson(heaterStatusPath, refreshFunction);
 
-    setInterval(function(){ getJson(heaterStatusPath, refresh); }, 20000);
+    setInterval(function(){
+        document.getElementById('timer').innerHTML = counter++;
+        if (counter % 20 == 0)
+            getJson(heaterStatusPath, refreshFunction); }, 1000);
 }
 
 function commandResponse(json) {
     /*whichPressed.style.visibility = "visible";*/
     document.getElementById('command').innerHTML += 'command result' + JSON.stringify(json);
-    getJson(heaterStatusPath, refresh);
+    getJson(heaterStatusPath, refreshFunction);
 }
 
-function refresh(json) {
+var refreshFunction = function refresh(json) {
     document.getElementById('summary').innerHTML = JSON.stringify(json);
 
     if (json.enabled)
@@ -66,11 +69,10 @@ function refresh(json) {
         stopManualForm.style.display = 'none';
     }
     whichPressed.style.visibility = "visible";
-}
-
+};
 
 function sendPost(form, callback) {
-    //whichPressed.style.visibility = "hidden";
+    /*whichPressed.style.visibility = "hidden";*/
     startManualForm.style.display = 'block';
     manualOffForm.style.display = 'block';
     stopManualForm.style.display = 'block';

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head><title>(titolo)</title>
+    <link href='ESP8266.css' rel='stylesheet'/>
+    <link href='switch.css' rel=stylesheet/>
+    <script type='text/javascript'>
+        var serverPath = '..';
+        var heaterStatusPath = serverPath + '/heaterstatus';
+        var commandPath = serverPath + '/command';
+        function getJson(path, callback) {
+            var request = new XMLHttpRequest();
+            request.open('GET', path, true);
+            request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            request.onload = function () {
+                if (this.status >= 200 && this.status < 400) {
+                    var json = JSON.parse(this.response);
+                    callback(json);
+                }
+            };
+            request.send();
+        }
+        function formInputToJSON(form) {
+            var data = {};
+            for (var i = 0, ii = form.length; i < ii; ++i) {
+                var input = form[i];
+                if (input.name) {
+                    if (input.type == 'number') {
+                        data[input.name] = Number(input.value);
+                    } else if (input.type == 'radio' && input.checked) {
+                        if (input.value == '0')                    data[input.name] = false; else                    data[input.name] = true;
+                    } else if (input.type == 'checkbox') {
+                        if (input.checked)                    data[input.name] = true; else                    data[input.name] = false;
+                    } else {
+                        data[input.name] = input.value;
+                    }
+                }
+            }
+            return data;
+        }
+        function sendCommand(data, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', commandPath, true);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            xhr.send(JSON.stringify(data));
+            document.getElementById('command').innerHTML = 'command sent' + JSON.stringify(data);
+            xhr.onloadend = function () {
+                result = xhr.responseText;
+                var json = JSON.parse(result);
+                callback(json);
+            };
+        }
+        var whichPressed;
+        var startManualForm;
+        var manualOffForm;
+        var stopManualForm;
+        var counter = 0;
+        function load() {
+            document.getElementById('heater').onsubmit = function (event) {
+                event.preventDefault();
+                sendPost(this, commandResponse);
+            };
+            startManualForm = document.getElementById('startManualForm');
+            startManualForm.onsubmit = function () {
+                event.preventDefault();
+                sendPost(this, commandResponse);
+            };
+            manualOffForm = document.getElementById('manualOffForm');
+            manualOffForm.onsubmit = function () {
+                event.preventDefault();
+                sendPost(this, commandResponse);
+            };
+            stopManualForm = document.getElementById('stopManualForm');
+            stopManualForm.onsubmit = function () {
+                event.preventDefault();
+                sendPost(this, commandResponse);
+            };
+            startManualForm.style.display = 'none';
+            manualOffForm.style.display = 'none';
+            stopManualForm.style.display = 'none';
+            getJson(heaterStatusPath, refreshFunction);
+            setInterval(function () {
+                getJson(heaterStatusPath, refresh);
+            }, 20000);
+        }
+        function commandResponse(json) {    /*whichPressed.style.visibility = "visible";*/
+            document.getElementById('command').innerHTML += 'command result' + JSON.stringify(json);
+            getJson(heaterStatusPath, refresh);
+        }
+        var refreshFunction = function refresh(json) {
+            document.getElementById('summary').innerHTML = JSON.stringify(json);
+            if (json.enabled)        document.getElementById('heaterEnabled').checked = true; else        document.getElementById('heaterEnabled').checked = false;
+            var pinSelectControl = document.getElementById('pinSelect');
+            for (var i, j = 0; i = pinSelectControl.options[j]; j++) {
+                if (i.value == json.pin) {
+                    pinSelectControl.selectedIndex = j;
+                    break;
+                }
+            }
+            if (json.status == 'manual' || json.status == 'manualoff') {
+                startManualForm.style.display = 'none';
+                manualOffForm.style.display = 'none';
+                stopManualForm.style.display = 'block';
+            } else {
+                startManualForm.style.display = 'block';
+                manualOffForm.style.display = 'block';
+                stopManualForm.style.display = 'none';
+            }
+            whichPressed.style.visibility = "visible";
+        };
+
+        function sendPost(form, callback) {    /*whichPressed.style.visibility = "hidden";*/
+            startManualForm.style.display = 'block';
+            manualOffForm.style.display = 'block';
+            stopManualForm.style.display = 'block';
+            var data = formInputToJSON(form);
+            sendCommand(data, callback);
+        }</script>
+</head>
+<body onload='load()'><!--Header---><h1 id="head">Webduino</h1>
+<ul id="navigation">
+    <li><a href="#" class="button hvr-underline-from-center">Home</a></li>
+    <li><a href="#" class="button hvr-underline-from-center">Impostazioni</a></li>
+    <li><a href="#" class="button hvr-underline-from-center">Rete</a></li>
+    <li><span class="active">Riscaldamento</span></li>
+</ul><!--Content--->
+<div id="content" class="container_16 clearfix">
+    <div class="grid_5">
+        <div class="box"><h2>Riscaldamento</h2>
+            <form action='/command' method='POST' id='heater'>
+                <p><strong>Abilitato : </strong><label class="input-toggle"><input type="checkbox" id="heaterEnabled"
+                                                                                   name="enabled"><span></span></label><br>
+                    <strong>Pin rele : </strong><label id="pinSelectValue" hidden>audi</label> <select id="pinSelect"
+                                                                                                       name="pin">
+                        <option value="D1">D1</option>
+                        <option value="D2">D2</option>
+                        <option value="D3">D3</option>
+                        <option value="D4">D4</option>
+                        <option value="D5">D5</option>
+                    </select> <br><br> <input type='hidden' name='command' value='heatersettings'> <input type='submit'
+                                                                                                          value="save"
+                                                                                                          onclick='whichPressed=this'>
+                </p>
+            </form>
+        </div>
+        <div class="box"><h2>Riscaldamento</h2>            <label id="summary">summary</label><br> <label id="command">command</label><br>
+            <label id="timer">timer</label>
+            <form action='/command' method='POST' id='startManualForm'><p> Minutesy:<input type='number' name='duration'
+                                                                                           value='30' min="1"
+                                                                                           max="30"><BR> Target:<input
+                    type='number' name='target' value='22.0' step='0.10'><BR> Sensor:<input type='radio' name='sensor'
+                                                                                            value='0'
+                                                                                            checked>Local<input
+                    type='radio' name='sensor' value='1'>Remote<BR> <input type='hidden' name='command' value='manual'>
+                <input type='submit' value='start manual' onclick='whichPressed=this'></p></form>
+            <form action='/command' method='POST' id='manualOffForm'><p> Minutesx:<input type='number' name='duration'
+                                                                                         value='30' min="1"
+                                                                                         max="30"><BR> <input
+                    type='hidden' name='command' value='manualoff'> <input type='submit' value='start manual off'
+                                                                           onclick='whichPressed=this'></p></form>
+            <div id='manual'>
+                <form action='/command' method='POST' id='stopManualForm'><p><input type='hidden' name='command'
+                                                                                    value='manualend'> <input
+                        type='submit' value='stop manual' onclick='whichPressed=this'></p></form>
+            </div>
+        </div>
+    </div>
+</div><!--Footer--->
+<div id="foot">
+    <div class="container_16 clearfix">
+        <div class="grid_16"><a href="#">Contact Me</a></div>
+    </div>
+</div>
+</body>
+</html>
