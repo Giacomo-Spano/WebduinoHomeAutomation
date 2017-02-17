@@ -31,8 +31,6 @@ public class ProgramQuartzJob implements Job {
 
         } catch (Exception e) {
 
-            //LOGGER.info("execute" + e.getStackTrace());
-            //e.printStackTrace();
 
             LOGGER.info("--- Error in job!");
             JobExecutionException e2 =

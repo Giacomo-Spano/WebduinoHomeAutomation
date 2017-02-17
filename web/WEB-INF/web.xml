@@ -126,6 +126,27 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>TemperatureSensorsStatusServlet</servlet-name>
+        <servlet-class>com.server.webduino.servlet.simulator.TemperatureSensorsStatusServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TemperatureSensorsStatusServlet</servlet-name>
+        <url-pattern>/temperaturesensorstatus</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SettingsServlet</servlet-name>
+        <servlet-class>com.server.webduino.servlet.simulator.SettingsServlet</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SettingsServlet</servlet-name>
+        <url-pattern>/settings</url-pattern>
+
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>CommandServlet</servlet-name>
         <servlet-class>com.server.webduino.servlet.simulator.CommandServlet</servlet-class>
     </servlet>

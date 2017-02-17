@@ -3,28 +3,36 @@
 <head>
     <title>(Type a title for your page here)</title>
 
+    <!-- build:css style.css -->
     <link href="ESP8266.css" rel="stylesheet"/>
-    <link href="switch.css" rel="stylesheet"/>
+    <!-- endbuild -->
+
+    <!-- build:js script.js -->
     <script src="webduino.js"></script>
     <script src="heater.js"></script>
-
-
-    <script type="text/javascript">
-
-        /*window.onload=load;*/
-    </script>
+    <!-- endbuild -->
 
 </head>
 
+<body>
+<!-- The Modal -->
+<div id="modalPopup" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalText">Some text in the Modal..</div>
+        <input type="button" id="okButton" value="Ok">
+        <input type="button" id="cancelButton" value="Annulla">
+    </div>
+</div>
+
 <!--copiare da qui-->
-<body onload='load()'>
-<!--Header--->
 <h1 id="head">Webduino</h1>
 <ul id="navigation">
-    <li><a href="#" class="button hvr-underline-from-center">Home</a></li>
-    <li><a href="#" class="button hvr-underline-from-center">Impostazioni</a></li>
-    <li><a href="#" class="button hvr-underline-from-center">Rete</a></li>
+    <li><a href="index.html" class="button hvr-underline-from-center">Home</a></li>
+    <li><a href="settings.html" class="button hvr-underline-from-center">Impostazioni</a></li>
     <li><span class="active">Riscaldamento</span></li>
+    <li><a href="temperature.html" class="button hvr-underline-from-center">Sensori temperatura</a></li>
 </ul>
 <!--Content--->
 <div id="content" class="container_16 clearfix">
@@ -32,7 +40,6 @@
         <div class="box">
 
             <h2>Riscaldamento</h2>
-            <form action='/command' method='POST' id='heater'>
                 <p>
                     <strong>Abilitato : </strong><label class="input-toggle"><input type="checkbox" id="heaterEnabled"
                                                                                     name="enabled"><span></span></label><br>
@@ -45,19 +52,12 @@
                         <option value="D5">D5</option>
                     </select>
                     <br><br>
-                    <input type='hidden' name='command' value='heatersettings'>
-                    <input type='submit' value="save" onclick='whichPressed=this'>
                 </p>
-            </form>
         </div>
 
         <div class="box">
 
             <h2>Riscaldamento</h2>
-
-            <label id="summary">summary</label><br>
-            <label id="command">command</label><br>
-            <label id="timer">timer</label>
 
             <form action='/command' method='POST' id='startManualForm'>
                 <p>
@@ -66,7 +66,7 @@
                     Sensor:<input type='radio' name='sensor' value='0' checked>Local<input type='radio' name='sensor'
                                                                                            value='1'>Remote<BR>
                     <input type='hidden' name='command' value='manual'>
-                    <input type='submit' value='start manual' onclick='whichPressed=this'>
+                    <input type='submit' value='start manual'>
                 </p>
             </form>
 
@@ -74,23 +74,19 @@
                 <p>
                     Minutesx:<input type='number' name='duration' value='30' min="1" max="30"><BR>
                     <input type='hidden' name='command' value='manualoff'>
-                    <input type='submit' value='start manual off' onclick='whichPressed=this'>
+                    <input type='submit' value='start manual off'>
                 </p>
             </form>
-
 
             <div id='manual'>
                 <form action='/command' method='POST' id='stopManualForm'>
                     <p>
                         <input type='hidden' name='command' value='manualend'>
-                        <input type='submit' value='stop manual' onclick='whichPressed=this'>
+                        <input type='submit' value='stop manual'>
                     </p>
                 </form>
             </div>
-
         </div>
-
-
     </div>
 </div>
 <!--Footer --->
@@ -99,5 +95,15 @@
         <div class="grid_16"><a href="#">Contact Me</a></div>
     </div>
 </div>
+
+<label id="summary">summary</label><br>
+<label id="command">command</label><br>
+<label id="timer">timer</label>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        load();
+    });
+</script>
 </body>
 </html>

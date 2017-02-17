@@ -18,7 +18,6 @@ public class SensorBase extends httpClient {
 
     public static final String Status_Offline = "OFFLINE";
     public static final String Status_Online = "ONLINE";
-
     protected int shieldid;
     protected String onlinestatus = Status_Offline;
     protected String subaddress;
@@ -26,7 +25,7 @@ public class SensorBase extends httpClient {
     protected Date lastUpdate;
     protected String type;
     protected int id;
-
+    protected String statusUpdatePath = "/status"; // può essere overidden a seconda del tipo
 
     public SensorBase() {
 
@@ -44,12 +43,10 @@ public class SensorBase extends httpClient {
     }
 
     public void setData(int shieldid, String subaddress, String name, Date date) {
-
         this.shieldid = shieldid;
         this.subaddress = subaddress;
         this.name = name;
         this.lastUpdate = date;
-
     }
 
     public Date getLastUpdate() {
@@ -91,25 +88,24 @@ public class SensorBase extends httpClient {
 
     public String requestStatusUpdate() { //
 
-        LOGGER.info("requestStatusUpdate");
+        LOGGER.info("requestStatusUpdate:" + statusUpdatePath);
 
         writeDataLog("requestStatusUpdate");
 
-        Result result = call("GET", "", "/status");
+        Result result = call("GET", "", statusUpdatePath);
         if (!result.res)
             return null;
 
         for (int i = 0; i < 2; i++) {
 
             LOGGER.log(Level.WARNING, "retry..." + (i + 1));
-            result = call("GET", "", "/status");
+            result = call("GET", "", statusUpdatePath);
             if (result != null)
                 return result.response;
         }
-        LOGGER.info("end requestStatusUpdate");
+        LOGGER.info("end requestStatusUpdate" + result.response);
         return null;
     }
-
 
     public void writeDataLog(String event) {
     }

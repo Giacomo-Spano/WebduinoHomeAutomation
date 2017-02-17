@@ -36,6 +36,9 @@ public class TemperatureSensor extends SensorBase {
     }*/
 
     public TemperatureSensor() {
+
+        //type = "temperature";
+        statusUpdatePath = "/temperaturesensorstatus";
     }
 
     /*public void setData(int shieldid, String subaddress, String name, Date date, double temperature, double avTemperature) {

@@ -1,8 +1,6 @@
 package com.server.webduino.servlet.simulator;
 
-import com.quartz.QuartzListener;
 import com.server.webduino.core.*;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,20 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
  * Created by Giacomo Span� on 08/11/2015.
  */
 //@WebServlet(name = "SensorServlet")
-public class ActuatorStatusServlet extends HttpServlet {
+public class SettingsServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(ActuatorStatusServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SettingsServlet.class.getName());
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 
         String id = request.getParameter("id");
 
@@ -34,14 +29,9 @@ public class ActuatorStatusServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter();
 
-
-            String json = "{\"shieldid\":0,\"enabled\":true,\"heaterpin\":\"D4\",\"remotetemperature\":0.00,\"addr\":\"HeaterActuator-18:fe:34:d4:c6:87\",\"status\":\"idle\",\"type\":\"heater\",\"name\":\"Riscaldamento\",\"relestatus\":\"false\"}";
-            out.print(json);
-
-
-
+        String json = "{\"localport\":3584,\"shieldname\":\"192.168.1.3\",\"ssid\":\"TP-LINK_3BD796\",\"password\":\"giacomocasa\",\"servername\":\"192.168.1.3\",\"serverport\":8080,\"localip\":\"192.168.1.9\",\"macaddress\":\"18:fe:34:d4:c6:87\",\"shieldid\":32,\"datetime\":\"15-02-2017 20:54:08\",\"power\":\"on\",\"lastrestart\":\"15-02-2017 20:51:14\",\"heap\":\"26944\",\"swversion\":\"1.02\"}";
+        out.print(json);
     }
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //questa servlet riceve command dalla app, dalle pagine wed e riceve status update dagli actuator diorettamente

@@ -34,6 +34,7 @@ public class HeaterActuator extends Actuator /*implements TemperatureSensor.Temp
     public HeaterActuator() {
         super();
         type = "heater";
+        statusUpdatePath = "/heaterstatus";
     }
 
     /*public HeaterActuator(int id, int shieldid, String subaddress, String name) {

@@ -1,8 +1,6 @@
 package com.server.webduino.servlet.simulator;
 
-import com.quartz.QuartzListener;
 import com.server.webduino.core.*;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,17 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
  * Created by Giacomo Span� on 08/11/2015.
  */
 //@WebServlet(name = "SensorServlet")
-public class ActuatorStatusServlet extends HttpServlet {
+public class TemperatureSensorsStatusServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(ActuatorStatusServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TemperatureSensorsStatusServlet.class.getName());
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -34,14 +30,15 @@ public class ActuatorStatusServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         PrintWriter out = response.getWriter();
 
-
-            String json = "{\"shieldid\":0,\"enabled\":true,\"heaterpin\":\"D4\",\"remotetemperature\":0.00,\"addr\":\"HeaterActuator-18:fe:34:d4:c6:87\",\"status\":\"idle\",\"type\":\"heater\",\"name\":\"Riscaldamento\",\"relestatus\":\"false\"}";
-            out.print(json);
-
-
+        String json = "{\"id\":32,\"temperaturesensorsenabled\":true,\"temperaturesensorspin\":\"D4\",\"sensors\":[{\"temperature\":23.90,\"avtemperature\":23.78,\"name\":\"2Bstudio\",\"type\":\"temperature\",\"addr\":\"28:11:1E:08:05:00:00:85\"},{\"temperature\":23.80,\"avtemperature\":23.73,\"name\":\"sensor1\",\"type\":\"temperature\",\"addr\":\"28:FF:7B:43:92:15:04:28\"}]}";
+        out.print(json);
 
     }
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //questa servlet riceve command dalla app, dalle pagine wed e riceve status update dagli actuator diorettamente
