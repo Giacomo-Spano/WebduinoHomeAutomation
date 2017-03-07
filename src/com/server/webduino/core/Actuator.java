@@ -88,7 +88,7 @@ public abstract class Actuator extends SensorBase {
             return true;
         } else {
             LOGGER.severe("command FAILED");
-            this.onlinestatus = Status_Offline;
+            this.online = false;
             writeDataLog("command FAILED");
             return false;
         }

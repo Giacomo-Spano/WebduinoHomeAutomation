@@ -100,7 +100,7 @@ public class TemperatureSensor extends SensorBase {
         LOGGER.info("updateFromJson json=" + json.toString());
         try {
             lastUpdate = date;
-            onlinestatus = Status_Online;
+            online = true;
             if (json.has("avtemperature"))
                 setAvTemperature(json.getDouble("avtemperature"));
             if (json.has("temperature"))
@@ -130,7 +130,7 @@ public class TemperatureSensor extends SensorBase {
         try {
             json.put("id", getId());
             json.put("shieldid", shieldid);
-            json.put("onlinestatus", onlinestatus);
+            json.put("online", online);
             json.put("subaddress", subaddress);
             json.put("temperature", getTemperature());
             json.put("avtemperature", getAvTemperature());

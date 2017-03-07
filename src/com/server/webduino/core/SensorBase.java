@@ -16,10 +16,10 @@ public class SensorBase extends httpClient {
 
     private static Logger LOGGER = Logger.getLogger(SensorBase.class.getName());
 
-    public static final String Status_Offline = "OFFLINE";
-    public static final String Status_Online = "ONLINE";
+    //public static final String Status_Offline = "OFFLINE";
+    //public static final String Status_Online = "ONLINE";
     protected int shieldid;
-    protected String onlinestatus = Status_Offline;
+    protected boolean online = false;
     protected String subaddress;
     protected String name; // valore letto dal db
     protected Date lastUpdate;
@@ -35,7 +35,7 @@ public class SensorBase extends httpClient {
 
         Date currentDate = Core.getDate();
         if (lastUpdate == null || (currentDate.getTime() - lastUpdate.getTime()) > (60 * 1000)) {
-            onlinestatus = Status_Offline;
+            online = false;
             return false;
         } else {
             return true;

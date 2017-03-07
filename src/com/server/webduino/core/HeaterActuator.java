@@ -342,7 +342,7 @@ public class HeaterActuator extends Actuator /*implements TemperatureSensor.Temp
         double oldRemoteTemperature = -1;
 
         lastUpdate = date;
-        onlinestatus = Status_Online;
+        online = true;
         try {
             LOGGER.info("received jsonResultSring=" + json.toString());
 
@@ -462,7 +462,7 @@ public class HeaterActuator extends Actuator /*implements TemperatureSensor.Temp
             json.put("time", strTime);
 
             json.put("shieldid", shieldid);
-            json.put("onlinestatus", onlinestatus);
+            json.put("online", online);
 
             json.put("type", type);
 
