@@ -112,9 +112,13 @@ public class HeaterActuatorCommand extends ActuatorCommand {
                 json.put("duration", duration);
                 json.put("target", targetTemperature);
                 json.put("localsensor", !remoteSensor);
-                //json.put("sensor",activeSensorID);
+                json.put("sensor",activeSensorID);
                 //json.put("program",activeProgramID);
                 //json.put("timerange",activeTimeRangeID);
+                TemperatureSensor tempSensor = (TemperatureSensor) Core.getSensorFromId(activeSensorID);
+                if (tempSensor != null) {
+                    activeSensorTemperature = tempSensor.getTemperature();
+                }
                 json.put("temperature", activeSensorTemperature);
 
             } else if (command.equals(HeaterActuatorCommand.Command_Manual_Off)) {

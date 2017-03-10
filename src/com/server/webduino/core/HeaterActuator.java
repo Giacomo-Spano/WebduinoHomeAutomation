@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 public class HeaterActuator extends Actuator /*implements TemperatureSensor.TemperatureSensorListener*/ {
     static final protected int local_sensor = 0;
     static final String STATUS_IDLE = "idle";
-    static final String STATUS_PROGRAMACTIVE = "program";
+    static final String STATUS_AUTOPROGRAM = "program";
+    //static final String STATUS_MANUALPROGRAM = "manualprogram";
     static final String STATUS_MANUAL = "manual";
     static final String STATUS_MANUALOFF = "manualoff";
     static final String STATUS_DISABLED = "disabled";

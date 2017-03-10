@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -190,7 +189,7 @@ public class Programs implements HeaterActuator.HeaterActuatorListener, Temperat
             } else {
                 LOGGER.info("->Active program" + mActiveProgram.program.id + " " + mActiveProgram.program.name);
 
-                if (actuator.getStatus().equals(HeaterActuator.STATUS_IDLE) || actuator.getStatus().equals(HeaterActuator.STATUS_PROGRAMACTIVE)) {
+                if (actuator.getStatus().equals(HeaterActuator.STATUS_IDLE) || actuator.getStatus().equals(HeaterActuator.STATUS_AUTOPROGRAM)) {
 
                     DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                     String timeStr = timeFormat.format(currentDate);

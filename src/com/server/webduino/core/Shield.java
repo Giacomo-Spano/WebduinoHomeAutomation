@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static com.server.webduino.core.SensorBase.Status_Offline;
+//import static com.server.webduino.core.SensorBase.Status_Offline;
 
 public class Shield extends httpClient {
 
