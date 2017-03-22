@@ -25,6 +25,7 @@ public class Shield extends httpClient {
     List<SensorBase> sensors = new ArrayList<>();
     List<Actuator> actuators = new ArrayList<>();
     public URL url;
+    public int port;
 
     /*public Shield(JSONObject jsonObj) {
         //FromJson(jsonObj);
@@ -70,6 +71,10 @@ public class Shield extends httpClient {
                 MACAddress = json.getString("MAC");
             if (json.has("boardname"))
                 boardName = json.getString("boardname");
+            if (json.has("localport"))
+                port = json.getInt("localport");
+            else
+                port = 80;
             if (json.has("localIP")) {
                 try {
                     url = new URL("http://" + json.getString("localIP"));
@@ -89,16 +94,29 @@ public class Shield extends httpClient {
                     JSONObject j = jsonArray.getJSONObject(i);
                     if (j.has("type")) {
                         String type = j.getString("type");
+                        SensorBase sensor;
                         if (type.equals("temperature")) {
-                            TemperatureSensor sensor = new TemperatureSensor();
-                            if (j.has("name"))
-                                sensor.name = j.getString("name");
-                            if (j.has("addr"))
-                                sensor.subaddress = j.getString("addr");
-                            if (j.has("type"))
-                                sensor.type = j.getString("type");
-                            sensors.add(sensor);
+                            sensor = (SensorBase) new TemperatureSensor();
+                        } else if (type.equals("currentsensor")) {
+                            sensor = (SensorBase) new CurrentSensor();
+                        } /*else if (type.equals("humiditysensor")) {
+                            sensor = (SensorBase) new HumiditySensor();
+                        } else if (type.equals("pressuresensor")) {
+                            sensor = (SensorBase) new PressureSensor();
+                        } else if (type.equals("pirsensor")) {
+                            sensor = (SensorBase) new PIRSensor();
+                        } else if (type.equals("doorsensor")) {
+                            sensor = (SensorBase) new DoorSensor();
+                        } */else {
+                            continue;
                         }
+                        if (j.has("name"))
+                            sensor.name = j.getString("name");
+                        if (j.has("addr"))
+                            sensor.subaddress = j.getString("addr");
+                        if (j.has("type"))
+                            sensor.type = j.getString("type");
+                        sensors.add(sensor);
                     }
                 }
             }
@@ -108,16 +126,21 @@ public class Shield extends httpClient {
                     JSONObject j = jsonArray.getJSONObject(i);
                     if (j.has("type")) {
                         String type = j.getString("type");
+                        Actuator actuator;
                         if (type.equals("heater")) {
-                            HeaterActuator actuator = new HeaterActuator();
-                            if (j.has("name"))
-                                actuator.name = j.getString("name");
-                            if (j.has("addr"))
-                                actuator.subaddress = j.getString("addr");
-                            if (j.has("type"))
-                                actuator.type = j.getString("type");
-                            actuators.add(actuator);
+                            actuator = (Actuator) new HeaterActuator();
+                        } /*else if (type.equals("current")) {
+                            actuator = (Actuator) new ReleActuator();
+                        } */else {
+                            continue;
                         }
+                        if (j.has("name"))
+                            actuator.name = j.getString("name");
+                        if (j.has("addr"))
+                            actuator.subaddress = j.getString("addr");
+                        if (j.has("type"))
+                            actuator.type = j.getString("type");
+                        actuators.add(actuator);
                     }
                 }
             }
@@ -141,6 +164,7 @@ public class Shield extends httpClient {
                 json.put("macaddres", MACAddress);
             if (url != null)
                 json.put("url", url);
+            json.put("port", port);
             JSONArray jarray = new JSONArray();
             for (SensorBase sensor : sensors) {
                 //SensorBase sensor = Shields.getSensorFromId(id);

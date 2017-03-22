@@ -28,8 +28,6 @@ public class Actuators implements Shields.ShieldsListener {
         return mActuatorList;
     }
 
-
-
     public Actuator getFromShieldId(int shieldid, String subaddress) {
         Iterator<Actuator> iterator = mActuatorList.iterator();
         while (iterator.hasNext()) {

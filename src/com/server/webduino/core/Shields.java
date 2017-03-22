@@ -71,6 +71,7 @@ public class Shields {
 
         mActuators = new Actuators();
         mSensors = new Sensors();
+        addListener(mSensors);
         addListener(mActuators);
     }
 
@@ -145,14 +146,16 @@ public class Shields {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = "NULL";
             date = "'" + df.format(shield.lastUpdate) + "'";
-            sql = "INSERT INTO shields (lastupdate, url, macaddress, boardname)" +
+            sql = "INSERT INTO shields (lastupdate, url, port, macaddress, boardname)" +
                     " VALUES ("
                     + date + ",\""
-                    + shield.url + "\",\""
+                    + shield.url + "\","
+                    + shield.port + ",\""
                     + shield.MACAddress + "\",\""
                     + shield.boardName + "\" ) " +
                     "ON DUPLICATE KEY UPDATE lastupdate=" + date
                     + ",url=\"" + shield.url + "\""
+                    + ",port=" + shield.port
                     + ",macaddress=\"" + shield.MACAddress + "\""
                     + ",boardname=\"" + shield.boardName + "\""
                     + ";";
@@ -223,6 +226,7 @@ public class Shields {
             }
         } else if (affectedRows == 1) { // row inserted
             shield.id = lastid;
+
             for(ShieldsListener listener : listeners) {
                 listener.addedShield(shield);
                 for(SensorBase actuator : shield.actuators) {
@@ -275,8 +279,10 @@ public class Shields {
                     shield.MACAddress = rs.getString("MACAddress");
                 if (rs.getString("boardname") != null)
                     shield.boardName = rs.getString("boardname");
+                shield.port = rs.getInt("port");
                 if (rs.getString("url") != null)
                     shield.url = new URL(rs.getString("url"));
+
                 list.add(shield);
             }
             // Clean-up environment
@@ -482,7 +488,7 @@ public class Shields {
             if (rs.next()) {
                 String strurl = rs.getString("url");
                 strurl = strurl.replace("http://","");
-                url = new URL("http://" + strurl);
+                url = new URL("http://" + strurl + ":" + rs.getInt("port"));
             }
             // Clean-up environment
             rs.close();

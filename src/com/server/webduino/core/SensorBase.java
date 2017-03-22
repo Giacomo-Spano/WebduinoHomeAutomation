@@ -125,6 +125,7 @@ public class SensorBase extends httpClient {
         Shields shields = new Shields();
         URL url = shields.getURL(shieldid);
 
+        //URL url = new URL(shields.getURL(shieldid).toString() + shi);
 
         LOGGER.info("url: " + url.toString());
         //boolean res;
