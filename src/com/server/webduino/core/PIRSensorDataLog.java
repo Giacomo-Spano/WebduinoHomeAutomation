@@ -5,18 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CurrentSensorDataLog extends DataLog {
+public class PIRSensorDataLog extends DataLog {
 
-    public Double current = 0.0;
+    public boolean open = false;
     public String tableName = "currentdatalog";
 
     @Override
     public String getSQLInsert(String event, SensorBase sensor) {
 
-        CurrentSensor currentSensor = (CurrentSensor) sensor;
+        PIRSensor pirSensor = (PIRSensor) sensor;
         String sql;
         sql = "INSERT INTO " + tableName + " (id, subaddress, date, current) VALUES ("
-                + currentSensor.id + ",'" + currentSensor.subaddress + "',"  + getStrDate() + "," + currentSensor.getCurrent() + ");";
+                + pirSensor.id + ",'" + pirSensor.subaddress + "',"  + getStrDate() + "," + pirSensor.getStatus() + ");";
         return sql;
     }
 
@@ -42,10 +42,10 @@ public class CurrentSensorDataLog extends DataLog {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                CurrentSensorDataLog data = new CurrentSensorDataLog();
+                PIRSensorDataLog data = new PIRSensorDataLog();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.");
                 data.date = df.parse(String.valueOf(rs.getTimestamp("date")));
-                data.current = rs.getDouble("current");
+                data.open = rs.getBoolean("motion");
                 list.add(data);
             }
             // Clean-up environment

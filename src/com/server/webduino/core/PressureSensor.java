@@ -8,48 +8,48 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class CurrentSensor extends SensorBase {
+public class PressureSensor extends SensorBase {
 
-    private static Logger LOGGER = Logger.getLogger(CurrentSensor.class.getName());
+    private static Logger LOGGER = Logger.getLogger(PressureSensor.class.getName());
 
-    private double current;
+    private double pressure;
 
-    public interface CurrentSensorListener {
-        void changeCurrent(int sensorId, double current);
+    public interface PressureSensorListener {
+        void changePressure(int sensorId, double current);
     }
 
-    private List<CurrentSensorListener> listeners = new ArrayList<CurrentSensorListener>();
-    public void addListener(CurrentSensorListener toAdd) {
+    private List<PressureSensorListener> listeners = new ArrayList<PressureSensorListener>();
+    public void addListener(PressureSensorListener toAdd) {
         listeners.add(toAdd);
     }
 
-    public CurrentSensor() {
+    public PressureSensor() {
     }
 
-    public void setCurrent(double current) {
+    public void setPressure(double pressure) {
 
         LOGGER.info("setCurrent");
 
-        double oldCurrent = this.current;
-        this.current = current;
+        double oldPressure = this.pressure;
+        this.pressure = pressure;
 
-        if (current != oldCurrent) {
+        if (pressure != oldPressure) {
             CurrentSensorDataLog dl = new CurrentSensorDataLog();
             dl.writelog("updateFromJson",this);
             // Notify everybody that may be interested.
-            for (CurrentSensorListener hl : listeners)
-                hl.changeCurrent(id, current);
+            for (PressureSensorListener hl : listeners)
+                hl.changePressure(id, pressure);
         }
     }
 
     @Override
     public void writeDataLog(String event) {
-        CurrentSensorDataLog dl = new CurrentSensorDataLog();
+        PressureSensorDataLog dl = new PressureSensorDataLog();
         dl.writelog(event, this);
     }
 
-    public double getCurrent() {
-        return current;
+    public double getPressure() {
+        return pressure;
     }
 
     @Override
@@ -59,8 +59,8 @@ public class CurrentSensor extends SensorBase {
         try {
             lastUpdate = date;
             online = true;
-            if (json.has("current"))
-                setCurrent(json.getDouble("current"));
+            if (json.has("pressure"))
+                setPressure(json.getDouble("pressure"));
             if (json.has("name"))
                 name = json.getString("name");
             super.setData(shieldid, subaddress, name, date);
@@ -80,7 +80,7 @@ public class CurrentSensor extends SensorBase {
             json.put("shieldid", shieldid);
             json.put("online", online);
             json.put("subaddress", subaddress);
-            json.put("current", getCurrent());
+            json.put("current", pressure);
             json.put("name", getName());
             json.put("lastupdate", getStrLastUpdate());
             json.put("type", type);

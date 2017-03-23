@@ -5,18 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CurrentSensorDataLog extends DataLog {
+public class PressureSensorDataLog extends DataLog {
 
-    public Double current = 0.0;
+    public Double pressure = 0.0;
     public String tableName = "currentdatalog";
 
     @Override
     public String getSQLInsert(String event, SensorBase sensor) {
 
-        CurrentSensor currentSensor = (CurrentSensor) sensor;
+        PressureSensor pressureSensor = (PressureSensor) sensor;
         String sql;
         sql = "INSERT INTO " + tableName + " (id, subaddress, date, current) VALUES ("
-                + currentSensor.id + ",'" + currentSensor.subaddress + "',"  + getStrDate() + "," + currentSensor.getCurrent() + ");";
+                + pressureSensor.id + ",'" + pressureSensor.subaddress + "',"  + getStrDate() + "," + pressureSensor.getPressure() + ");";
         return sql;
     }
 
@@ -42,10 +42,10 @@ public class CurrentSensorDataLog extends DataLog {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                CurrentSensorDataLog data = new CurrentSensorDataLog();
+                PressureSensorDataLog data = new PressureSensorDataLog();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.");
                 data.date = df.parse(String.valueOf(rs.getTimestamp("date")));
-                data.current = rs.getDouble("current");
+                data.pressure = rs.getDouble("pressure");
                 list.add(data);
             }
             // Clean-up environment

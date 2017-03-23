@@ -8,14 +8,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class CurrentSensor extends SensorBase {
+public class HumiditySensor extends SensorBase {
 
-    private static Logger LOGGER = Logger.getLogger(CurrentSensor.class.getName());
+    private static Logger LOGGER = Logger.getLogger(HumiditySensor.class.getName());
 
-    private double current;
+    private int humidity;
 
     public interface CurrentSensorListener {
-        void changeCurrent(int sensorId, double current);
+        void changeHumidity(int sensorId, double humidity);
     }
 
     private List<CurrentSensorListener> listeners = new ArrayList<CurrentSensorListener>();
@@ -23,33 +23,33 @@ public class CurrentSensor extends SensorBase {
         listeners.add(toAdd);
     }
 
-    public CurrentSensor() {
+    public HumiditySensor() {
     }
 
-    public void setCurrent(double current) {
+    public void setCurrent(int humidity) {
 
-        LOGGER.info("setCurrent");
+        LOGGER.info("setHumidity");
 
-        double oldCurrent = this.current;
-        this.current = current;
+        double oldHumidity = this.humidity;
+        this.humidity = humidity;
 
-        if (current != oldCurrent) {
+        if (humidity != oldHumidity) {
             CurrentSensorDataLog dl = new CurrentSensorDataLog();
             dl.writelog("updateFromJson",this);
             // Notify everybody that may be interested.
             for (CurrentSensorListener hl : listeners)
-                hl.changeCurrent(id, current);
+                hl.changeHumidity(id, humidity);
         }
     }
 
     @Override
     public void writeDataLog(String event) {
-        CurrentSensorDataLog dl = new CurrentSensorDataLog();
+        HumiditySensorDataLog dl = new HumiditySensorDataLog();
         dl.writelog(event, this);
     }
 
-    public double getCurrent() {
-        return current;
+    public int getHumidity() {
+        return humidity;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CurrentSensor extends SensorBase {
             lastUpdate = date;
             online = true;
             if (json.has("current"))
-                setCurrent(json.getDouble("current"));
+                setCurrent(json.getInt("humidity"));
             if (json.has("name"))
                 name = json.getString("name");
             super.setData(shieldid, subaddress, name, date);
@@ -80,7 +80,7 @@ public class CurrentSensor extends SensorBase {
             json.put("shieldid", shieldid);
             json.put("online", online);
             json.put("subaddress", subaddress);
-            json.put("current", getCurrent());
+            json.put("current", humidity);
             json.put("name", getName());
             json.put("lastupdate", getStrLastUpdate());
             json.put("type", type);

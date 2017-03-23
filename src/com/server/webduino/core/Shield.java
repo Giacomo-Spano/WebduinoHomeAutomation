@@ -99,7 +99,7 @@ public class Shield extends httpClient {
                             sensor = (SensorBase) new TemperatureSensor();
                         } else if (type.equals("currentsensor")) {
                             sensor = (SensorBase) new CurrentSensor();
-                        } /*else if (type.equals("humiditysensor")) {
+                        } else if (type.equals("humiditysensor")) {
                             sensor = (SensorBase) new HumiditySensor();
                         } else if (type.equals("pressuresensor")) {
                             sensor = (SensorBase) new PressureSensor();
@@ -107,7 +107,7 @@ public class Shield extends httpClient {
                             sensor = (SensorBase) new PIRSensor();
                         } else if (type.equals("doorsensor")) {
                             sensor = (SensorBase) new DoorSensor();
-                        } */else {
+                        } else {
                             continue;
                         }
                         if (j.has("name"))
@@ -129,9 +129,9 @@ public class Shield extends httpClient {
                         Actuator actuator;
                         if (type.equals("heater")) {
                             actuator = (Actuator) new HeaterActuator();
-                        } /*else if (type.equals("current")) {
+                        } else if (type.equals("current")) {
                             actuator = (Actuator) new ReleActuator();
-                        } */else {
+                        } else {
                             continue;
                         }
                         if (j.has("name"))

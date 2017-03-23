@@ -8,14 +8,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class CurrentSensor extends SensorBase {
+public class DoorSensor extends SensorBase {
 
-    private static Logger LOGGER = Logger.getLogger(CurrentSensor.class.getName());
+    private static Logger LOGGER = Logger.getLogger(DoorSensor.class.getName());
 
-    private double current;
+    private boolean open;
 
     public interface CurrentSensorListener {
-        void changeCurrent(int sensorId, double current);
+        void changeStatus(int sensorId, boolean open);
     }
 
     private List<CurrentSensorListener> listeners = new ArrayList<CurrentSensorListener>();
@@ -23,33 +23,33 @@ public class CurrentSensor extends SensorBase {
         listeners.add(toAdd);
     }
 
-    public CurrentSensor() {
+    public DoorSensor() {
     }
 
-    public void setCurrent(double current) {
+    public void setStatus(boolean open) {
 
-        LOGGER.info("setCurrent");
+        LOGGER.info("setStatus");
 
-        double oldCurrent = this.current;
-        this.current = current;
+        boolean oldOpen = this.open;
+        this.open = open;
 
-        if (current != oldCurrent) {
+        if (open != oldOpen) {
             CurrentSensorDataLog dl = new CurrentSensorDataLog();
             dl.writelog("updateFromJson",this);
             // Notify everybody that may be interested.
             for (CurrentSensorListener hl : listeners)
-                hl.changeCurrent(id, current);
+                hl.changeStatus(id, open);
         }
     }
 
     @Override
     public void writeDataLog(String event) {
-        CurrentSensorDataLog dl = new CurrentSensorDataLog();
+        DoorSensorDataLog dl = new DoorSensorDataLog();
         dl.writelog(event, this);
     }
 
-    public double getCurrent() {
-        return current;
+    public boolean getStatus() {
+        return open;
     }
 
     @Override
@@ -59,8 +59,8 @@ public class CurrentSensor extends SensorBase {
         try {
             lastUpdate = date;
             online = true;
-            if (json.has("current"))
-                setCurrent(json.getDouble("current"));
+            if (json.has("open"))
+                setStatus(json.getBoolean("open"));
             if (json.has("name"))
                 name = json.getString("name");
             super.setData(shieldid, subaddress, name, date);
@@ -80,7 +80,7 @@ public class CurrentSensor extends SensorBase {
             json.put("shieldid", shieldid);
             json.put("online", online);
             json.put("subaddress", subaddress);
-            json.put("current", getCurrent());
+            json.put("current", open);
             json.put("name", getName());
             json.put("lastupdate", getStrLastUpdate());
             json.put("type", type);
