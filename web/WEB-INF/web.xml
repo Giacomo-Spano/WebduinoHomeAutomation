@@ -136,6 +136,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>SensorsStatusServlet</servlet-name>
+        <servlet-class>com.server.webduino.servlet.simulator.SensorsStatusServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SensorsStatusServlet</servlet-name>
+        <url-pattern>/sensorstatus</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>SettingsServlet</servlet-name>
         <servlet-class>com.server.webduino.servlet.simulator.SettingsServlet</servlet-class>
 

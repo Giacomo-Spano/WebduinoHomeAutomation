@@ -28,6 +28,7 @@ public class ReleActuatorCommand extends ActuatorCommand {
     public int activeTimeRangeID;
     public int activeSensorID;
     public double activeSensorTemperature;
+    public boolean on;
 
     public static String getCommandName(String n) {
 
